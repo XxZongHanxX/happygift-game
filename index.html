@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>🎄 交換禮物大作戰：主持人安全授權版</title>
+    <title>🎄 交換禮物大作戰：主持人動態管理版</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;700;900&display=swap');
 
@@ -51,12 +51,18 @@
             border-radius: 10px;
             padding: 15px;
             display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .control-row {
+            display: flex;
             justify-content: space-around;
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 20px;
-            display: none; /* 預設隱藏，須主持人驗證後顯示 */
         }
 
         .host-login-bar {
@@ -87,13 +93,33 @@
 
         .btn-shuffle { background: #e74c3c; box-shadow: 0 4px 0 #962d22; }
         .btn-download { background: #27ae60; box-shadow: 0 4px 0 #145a32; }
+        .btn-add { background: #2980b9; box-shadow: 0 4px 0 #1f618d; }
         .btn-host { background: #f39c12; color: #000; font-weight: bold; box-shadow: 0 4px 0 #b7950b; }
+
+        .add-participant-box {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .add-input {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 180px;
+            font-size: 14px;
+            text-align: center;
+        }
 
         .player-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 12px;
             margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 5px;
         }
 
         .player-card {
@@ -104,6 +130,7 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
         }
 
         .player-card:hover {
@@ -123,7 +150,23 @@
             color: #58a6ff;
         }
 
-        /* 彈出視窗 (Modal) */
+        .delete-btn {
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 10px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -217,26 +260,32 @@
 
 <div class="game-cabinet">
     <div class="arcade-title">🎄 聖誕交換禮物大作戰 🎄</div>
-    <div class="arcade-subtitle">安全加密版：一般參與者僅能輸入個人密碼解鎖，洗牌與總表下載功能受主持人權限保護！</div>
+    <div class="arcade-subtitle">主持人動態管理版：可隨時新增參與者、重新洗牌與安全加密解鎖！</div>
 
     <!-- 主持人登入解鎖列 -->
     <div class="host-login-bar" id="hostLoginBar">
         <span style="font-size: 13px; color: #f39c12; font-weight: bold;">🔒 主持人專用區：</span>
-        <input type="password" id="hostPinInput" placeholder="輸入主持人密碼" style="padding: 6px; width: 130px; text-align: center; border-radius: 4px; border: 1px solid #ccc;" maxlength="6">
+        <input type="password" id="hostPinInput" placeholder="輸入主持人密碼" style="padding: 6px; width: 130px; text-align: center; border-radius: 4px; border: 1px solid #ccc;" maxlength="8" onkeydown="if(event.key==='Enter') verifyHost()">
         <button class="btn-arcade btn-host" onclick="verifyHost()">解鎖主持權限</button>
     </div>
 
     <!-- 授權後才顯示的控制面板 -->
     <div class="control-panel" id="controlPanel">
-        <button class="btn-arcade btn-shuffle" onclick="generateNewGame()">🔄 重新洗牌配對</button>
-        <button class="btn-arcade btn-download" onclick="downloadMasterTxt()">📥 下載密碼總表 (TXT)</button>
-        <span style="font-size: 11px; color: #2ecc71; width: 100%; text-align: center; margin-top: 5px;">✅ 主持人權限已啟動</span>
+        <div class="control-row">
+            <button class="btn-arcade btn-shuffle" onclick="generateNewGame()">🔄 重新洗牌配對</button>
+            <button class="btn-arcade btn-download" onclick="downloadMasterTxt()">📥 下載密碼總表 (TXT)</button>
+        </div>
+        <div class="control-row add-participant-box">
+            <input type="text" id="newParticipantName" class="add-input" placeholder="輸入新參與者姓名" onkeydown="if(event.key==='Enter') addParticipant()">
+            <button class="btn-arcade btn-add" onclick="addParticipant()">➕ 新增參與者</button>
+        </div>
+        <span style="font-size: 11px; color: #2ecc71; width: 100%; text-align: center;">✅ 主持人權限已啟動（滑鼠移至卡片可刪除成員）</span>
     </div>
 
     <div id="playerGrid" class="player-grid"></div>
 
     <div class="logger-box" id="systemLog">
-        [系統提示] 機台已上線。洗牌按鈕與管理權限已隱藏，需輸入主持人密碼解鎖。
+        [系統提示] 機台已上線。請輸入主持人密碼解鎖管理與新增功能。
     </div>
 </div>
 
@@ -253,14 +302,14 @@
 </div>
 
 <script>
-    const participants = ["承軒", "子倫", "傑夫", "朱哲", "BAO", "路人", "刁哥", "昱翔", "宗翰", "子豪", "俊逸"];
-    const avatars = ["🎅", "🤶", "🦌", "⛄", "🎁", "🎄", "⭐", "🔔", "🍪", "🧊", "🧦"];
+    let participants = ["承軒", "子倫", "傑夫", "朱哲", "BAO", "路人", "刁哥", "昱翔", "宗翰", "子豪", "俊逸"];
+    const avatars = ["🎅", "🤶", "🦌", "⛄", "🎁", "🎄", "⭐", "🔔", "🍪", "🧊", "🧦", "🧸", "🕯️", "🍬", "🍫"];
     let gameData = [];
     let activeIndex = null;
     let rawPasswords = {}; 
+    let isHostMode = false;
 
-    // 主持人的安全密碼（預設設定為 8888，你也可以隨時在這裡更改）
-    const HOST_PASSWORD_HASH = "5c29bb6d691728a1addd3820fd92b05748447525b8ba9518852512789ab7e7ab"; // "8888" 的 SHA-256
+    const HOST_PASSWORD_HASH = "5c29bb6d691728a1addd3820fd92b05748447525b8ba9518852512789ab7e7ab"; // 8975
 
     function getRandomPwd() {
         return Math.floor(1000 + Math.random() * 9000).toString();
@@ -279,19 +328,27 @@
         let inputHash = await sha256(inputVal);
 
         if (inputHash === HOST_PASSWORD_HASH) {
+            isHostMode = true;
             document.getElementById('hostLoginBar').style.display = 'none';
             document.getElementById('controlPanel').style.display = 'flex';
-            logMessage("[主持人解鎖] 歡迎回來！您已獲得重新洗牌與總表下載權限。");
+            renderGrid();
+            logMessage("[主持人解鎖] 歡迎回來！您現在可以新增成員、重新洗牌與下載總表。");
         } else {
             alert("❌ 主持人密碼錯誤！");
         }
     }
 
     async function generateNewGame() {
+        if (participants.length < 2) {
+            alert("❌ 參與人數至少需要 2 人以上才能進行交換禮物！");
+            return;
+        }
+
         let targets = [...participants];
         let valid = false;
+        let safetyCounter = 0;
         
-        while (!valid) {
+        while (!valid && safetyCounter < 1000) {
             targets.sort(() => Math.random() - 0.5);
             valid = true;
             for (let i = 0; i < participants.length; i++) {
@@ -299,6 +356,17 @@
                     valid = false;
                     break;
                 }
+            }
+            safetyCounter++;
+        }
+
+        if (!valid) {
+            // 若人數太少或隨機無法錯開，強制手動位移
+            for (let i = 0; i < targets.length; i++) {
+                let nextIdx = (i + 1) % targets.length;
+                let temp = targets[i];
+                targets[i] = targets[nextIdx];
+                targets[nextIdx] = temp;
             }
         }
 
@@ -313,14 +381,47 @@
 
             gameData.push({
                 name: p,
-                avatar: avatars[i],
+                avatar: avatars[i % avatars.length],
                 pwdHash: pwdHash,
                 target: targets[i]
             });
         }
 
         renderGrid();
-        logMessage("✨ 主持人已執行重新洗牌！全新加密配對已生效。");
+        logMessage("✨ 主持人已更新名單並重新洗牌！全新配對與密碼已生效。");
+    }
+
+    async function addParticipant() {
+        let input = document.getElementById('newParticipantName');
+        let name = input.value.trim();
+
+        if (!name) {
+            alert("❌ 請輸入有效的姓名！");
+            return;
+        }
+
+        if (participants.includes(name)) {
+            alert("❌ 此名字已經在名單中了！");
+            return;
+        }
+
+        participants.push(name);
+        input.value = "";
+        await generateNewGame();
+        logMessage(`[新增成員] 已成功新增參與者：${name}，並自動重新洗牌！`);
+    }
+
+    async function removeParticipant(name) {
+        if (participants.length <= 3) {
+            alert("❌ 參與人數過少，至少需保留 3 人！");
+            return;
+        }
+
+        if (confirm(`確定要移除參與者「${name}」嗎？`)) {
+            participants = participants.filter(p => p !== name);
+            await generateNewGame();
+            logMessage(`[移除成員] 已移除參與者：${name}，並自動重新洗牌。`);
+        }
     }
 
     function renderGrid() {
@@ -331,7 +432,15 @@
             let card = document.createElement('div');
             card.className = 'player-card';
             card.onclick = () => openModal(index);
+            
+            let deleteBtnHtml = '';
+            if (isHostMode) {
+                deleteBtnHtml = `<button class="delete-btn" onclick="event.stopPropagation(); removeParticipant('${item.name}')">×</button>`;
+                card.querySelector?.('.delete-btn') || (card.innerHTML += `<style>.player-card:hover .delete-btn { display: flex; }</style>`);
+            }
+
             card.innerHTML = `
+                ${deleteBtnHtml}
                 <div class="player-avatar">${item.avatar}</div>
                 <div class="player-name">${item.name}</div>
                 <div style="font-size: 11px; color: #8b949e; margin-top: 4px;">安全解鎖 🔒</div>
@@ -393,10 +502,8 @@
         logMessage("📥 主持人已下載最新密碼總表 (TXT)。");
     }
 
-    // 初始化第一局（預設自動產生，但洗牌按鈕隱藏需驗證）
+    // 初始化第一局
     generateNewGame();
-    // 預設將控制面板隱藏，僅保留登入列
-    document.getElementById('controlPanel').style.display = 'none';
 </script>
 
 </body>
