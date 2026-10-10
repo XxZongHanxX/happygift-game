@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>🎄 交換禮物大作戰：主持人安全授權版</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: radial-gradient(circle, #1a2530 0%, #0d1117 100%);
+            color: #ecf0f1;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-cabinet {
+            background: #21262d;
+            border: 6px solid #f39c12;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(243, 156, 18, 0.4), inset 0 0 20px rgba(0,0,0,0.8);
+            max-width: 750px;
+            width: 100%;
+            padding: 25px;
+            position: relative;
+        }
+
+        .arcade-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 16px;
+            color: #f1c40f;
+            text-align: center;
+            text-shadow: 3px 3px #c0392b;
+            margin-bottom: 5px;
+        }
+
+        .arcade-subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #95a5a6;
+            margin-bottom: 20px;
+        }
+
+        .control-panel {
+            background: #161b22;
+            border: 3px solid #34495e;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            display: none; /* 預設隱藏，須主持人驗證後顯示 */
+        }
+
+        .host-login-bar {
+            text-align: center;
+            margin-bottom: 20px;
+            background: #161b22;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px dashed #f39c12;
+        }
+
+        .btn-arcade {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 4px 0 #000;
+            transition: all 0.1s ease;
+        }
+
+        .btn-arcade:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #000;
+        }
+
+        .btn-shuffle { background: #e74c3c; box-shadow: 0 4px 0 #962d22; }
+        .btn-download { background: #27ae60; box-shadow: 0 4px 0 #145a32; }
+        .btn-host { background: #f39c12; color: #000; font-weight: bold; box-shadow: 0 4px 0 #b7950b; }
+
+        .player-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .player-card {
+            background: #30363d;
+            border: 2px solid #484f58;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .player-card:hover {
+            border-color: #f1c40f;
+            transform: scale(1.03);
+            background: #38424d;
+        }
+
+        .player-avatar {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .player-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #58a6ff;
+        }
+
+        /* 彈出視窗 (Modal) */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: #161b22;
+            border: 4px solid #f1c40f;
+            border-radius: 12px;
+            padding: 25px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(241, 196, 15, 0.5);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            color: #f1c40f;
+            margin-bottom: 15px;
+        }
+
+        .pin-input {
+            width: 80%;
+            padding: 10px;
+            font-size: 22px;
+            text-align: center;
+            background: #0d1117;
+            border: 2px solid #30363d;
+            color: #fff;
+            border-radius: 6px;
+            letter-spacing: 8px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .pin-input:focus {
+            border-color: #58a6ff;
+        }
+
+        .btn-submit {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 3px 0 #11381b;
+        }
+
+        .btn-submit:active { transform: translateY(3px); box-shadow: none; }
+        .btn-close { background: #da3633; margin-top: 10px; box-shadow: 0 3px 0 #591d1b; }
+
+        .result-display {
+            font-size: 20px;
+            color: #2ea043;
+            font-weight: 900;
+            margin-top: 15px;
+            word-break: break-all;
+        }
+
+        .logger-box {
+            background: #0d1117;
+            border: 2px dashed #30363d;
+            border-radius: 6px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #8b949e;
+            max-height: 80px;
+            overflow-y: auto;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-cabinet">
+    <div class="arcade-title">🎄 聖誕交換禮物大作戰 🎄</div>
+    <div class="arcade-subtitle">安全加密版：一般參與者僅能輸入個人密碼解鎖，洗牌與總表下載功能受主持人權限保護！</div>
+
+    <!-- 主持人登入解鎖列 -->
+    <div class="host-login-bar" id="hostLoginBar">
+        <span style="font-size: 13px; color: #f39c12; font-weight: bold;">🔒 主持人專用區：</span>
+        <input type="password" id="hostPinInput" placeholder="輸入主持人密碼" style="padding: 6px; width: 130px; text-align: center; border-radius: 4px; border: 1px solid #ccc;" maxlength="6">
+        <button class="btn-arcade btn-host" onclick="verifyHost()">解鎖主持權限</button>
+    </div>
+
+    <!-- 授權後才顯示的控制面板 -->
+    <div class="control-panel" id="controlPanel">
+        <button class="btn-arcade btn-shuffle" onclick="generateNewGame()">🔄 重新洗牌配對</button>
+        <button class="btn-arcade btn-download" onclick="downloadMasterTxt()">📥 下載密碼總表 (TXT)</button>
+        <span style="font-size: 11px; color: #2ecc71; width: 100%; text-align: center; margin-top: 5px;">✅ 主持人權限已啟動</span>
+    </div>
+
+    <div id="playerGrid" class="player-grid"></div>
+
+    <div class="logger-box" id="systemLog">
+        [系統提示] 機台已上線。洗牌按鈕與管理權限已隱藏，需輸入主持人密碼解鎖。
+    </div>
+</div>
+
+<!-- 玩家密碼輸入彈跳視窗 -->
+<div id="pinModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-title" id="modalPlayerName">玩家解鎖</div>
+        <div style="font-size: 13px; color: #8b949e; margin-bottom: 10px;">請輸入您的 4 位數專屬密碼</div>
+        <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" onkeydown="if(event.key==='Enter') verifyPin()">
+        <button class="btn-submit" onclick="verifyPin()">確認解鎖</button>
+        <button class="btn-submit btn-close" onclick="closeModal()">返回</button>
+        <div id="modalResult" class="result-display"></div>
+    </div>
+</div>
+
+<script>
+    const participants = ["承軒", "子倫", "傑夫", "朱哲", "BAO", "路人", "刁哥", "昱翔", "宗翰", "子豪", "俊逸"];
+    const avatars = ["🎅", "🤶", "🦌", "⛄", "🎁", "🎄", "⭐", "🔔", "🍪", "🧊", "🧦"];
+    let gameData = [];
+    let activeIndex = null;
+    let rawPasswords = {}; 
+
+    // 主持人的安全密碼（預設設定為 8888，你也可以隨時在這裡更改）
+    const HOST_PASSWORD_HASH = "5c29bb6d691728a1addd3820fd92b05748447525b8ba9518852512789ab7e7ab"; // "8888" 的 SHA-256
+
+    function getRandomPwd() {
+        return Math.floor(1000 + Math.random() * 9000).toString();
+    }
+
+    async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+
+    async function verifyHost() {
+        let inputVal = document.getElementById('hostPinInput').value;
+        let inputHash = await sha256(inputVal);
+
+        if (inputHash === HOST_PASSWORD_HASH) {
+            document.getElementById('hostLoginBar').style.display = 'none';
+            document.getElementById('controlPanel').style.display = 'flex';
+            logMessage("[主持人解鎖] 歡迎回來！您已獲得重新洗牌與總表下載權限。");
+        } else {
+            alert("❌ 主持人密碼錯誤！");
+        }
+    }
+
+    async function generateNewGame() {
+        let targets = [...participants];
+        let valid = false;
+        
+        while (!valid) {
+            targets.sort(() => Math.random() - 0.5);
+            valid = true;
+            for (let i = 0; i < participants.length; i++) {
+                if (participants[i] === targets[i]) {
+                    valid = false;
+                    break;
+                }
+            }
+        }
+
+        rawPasswords = {};
+        gameData = [];
+
+        for (let i = 0; i < participants.length; i++) {
+            let p = participants[i];
+            let pwd = getRandomPwd();
+            rawPasswords[p] = pwd;
+            let pwdHash = await sha256(pwd);
+
+            gameData.push({
+                name: p,
+                avatar: avatars[i],
+                pwdHash: pwdHash,
+                target: targets[i]
+            });
+        }
+
+        renderGrid();
+        logMessage("✨ 主持人已執行重新洗牌！全新加密配對已生效。");
+    }
+
+    function renderGrid() {
+        const grid = document.getElementById('playerGrid');
+        grid.innerHTML = '';
+
+        gameData.forEach((item, index) => {
+            let card = document.createElement('div');
+            card.className = 'player-card';
+            card.onclick = () => openModal(index);
+            card.innerHTML = `
+                <div class="player-avatar">${item.avatar}</div>
+                <div class="player-name">${item.name}</div>
+                <div style="font-size: 11px; color: #8b949e; margin-top: 4px;">安全解鎖 🔒</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function openModal(index) {
+        activeIndex = index;
+        document.getElementById('modalPlayerName').innerText = `${gameData[index].name} 的禮物箱`;
+        document.getElementById('pinInput').value = '';
+        document.getElementById('modalResult').innerText = '';
+        document.getElementById('pinModal').style.display = 'flex';
+        document.getElementById('pinInput').focus();
+    }
+
+    function closeModal() {
+        document.getElementById('pinModal').style.display = 'none';
+        activeIndex = null;
+    }
+
+    async function verifyPin() {
+        let inputVal = document.getElementById('pinInput').value;
+        let resDiv = document.getElementById('modalResult');
+
+        if (activeIndex === null) return;
+
+        let inputHash = await sha256(inputVal);
+
+        if (inputHash === gameData[activeIndex].pwdHash) {
+            resDiv.innerHTML = `🎉 恭喜解鎖！<br>您要送給：<span style="color:#f1c40f;">${gameData[activeIndex].target}</span>`;
+            logMessage(`[解鎖成功] ${gameData[activeIndex].name} 成功開啟了禮物箱！`);
+        } else {
+            alert("❌ 密碼錯誤！請重新輸入。");
+            logMessage(`[密碼錯誤] ${gameData[activeIndex].name} 輸入了錯誤的密碼。`);
+            resDiv.innerHTML = "";
+        }
+    }
+
+    function logMessage(msg) {
+        let logBox = document.getElementById('systemLog');
+        logBox.innerHTML = msg + "<br>" + logBox.innerHTML;
+    }
+
+    function downloadMasterTxt() {
+        let content = "=== 主持人專用：最新密碼總表 ===\n\n";
+        gameData.forEach(item => {
+            content += item.name + "：" + rawPasswords[item.name] + "\n";
+        });
+
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'latest_master_list.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+        logMessage("📥 主持人已下載最新密碼總表 (TXT)。");
+    }
+
+    // 初始化第一局（預設自動產生，但洗牌按鈕隱藏需驗證）
+    generateNewGame();
+    // 預設將控制面板隱藏，僅保留登入列
+    document.getElementById('controlPanel').style.display = 'none';
+</script>
+
+</body>
+</html>
