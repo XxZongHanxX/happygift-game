@@ -274,6 +274,7 @@
         <div class="control-row">
             <button class="btn-arcade btn-shuffle" onclick="generateNewGame()">🔄 重新洗牌配對</button>
             <button class="btn-arcade btn-download" onclick="downloadMasterTxt()">📥 下載密碼總表 (TXT)</button>
+            <button class="btn-arcade btn-save-html" onclick="downloadUpdatedHtml()" style="background: #8e44ad; box-shadow: 0 4px 0 #512e5f;">💾 儲存並更新網頁</button>
         </div>
         <div class="control-row add-participant-box">
             <input type="text" id="newParticipantName" class="add-input" placeholder="輸入新參與者姓名" onkeydown="if(event.key==='Enter') addParticipant()">
@@ -302,7 +303,7 @@
 </div>
 
 <script>
-    let participants = ["承軒", "子倫", "傑夫", "朱哲", "BAO", "路人", "刁哥", "昱翔", "宗翰", "子豪", "俊逸"];
+    let participants = ["承軒", "子倫", "傑夫", "朱哲", "BAO", "路人", "刁哥", "昱翔", "宗翰", "子豪", "俊逸", "睿彬爸爸"];
     const avatars = ["🎅", "🤶", "🦌", "⛄", "🎁", "🎄", "⭐", "🔔", "🍪", "🧊", "🧦", "🧸", "🕯️", "🍬", "🍫"];
     let gameData = [];
     let activeIndex = null;
@@ -361,7 +362,6 @@
         }
 
         if (!valid) {
-            // 若人數太少或隨機無法錯開，強制手動位移
             for (let i = 0; i < targets.length; i++) {
                 let nextIdx = (i + 1) % targets.length;
                 let temp = targets[i];
@@ -472,7 +472,7 @@
         let inputHash = await sha256(inputVal);
 
         if (inputHash === gameData[activeIndex].pwdHash) {
-            resDiv.innerHTML = `🎉 恭喜解鎖！<br>您要送給：<span style="color:#f1c40f;">${gameData[activeIndex].target}</span>`;
+            resDiv.innerHTML = `🎉 恭喜解鎖！<br>You要送給：<span style="color:#f1c40f;">${gameData[activeIndex].target}</span>`;
             logMessage(`[解鎖成功] ${gameData[activeIndex].name} 成功開啟了禮物箱！`);
         } else {
             alert("❌ 密碼錯誤！請重新輸入。");
@@ -487,6 +487,10 @@
     }
 
     function downloadMasterTxt() {
+        if (!isHostMode) {
+            alert("❌ 權限不足！必須先輸入主持人密碼解鎖才能使用此功能。");
+            return;
+        }
         let content = "=== 主持人專用：最新密碼總表 ===\n\n";
         gameData.forEach(item => {
             content += item.name + "：" + rawPasswords[item.name] + "\n";
@@ -502,7 +506,28 @@
         logMessage("📥 主持人已下載最新密碼總表 (TXT)。");
     }
 
-    // 初始化第一局
+    function downloadUpdatedHtml() {
+        if (!isHostMode) {
+            alert("❌ 權限不足！必須先輸入主持人密碼解鎖才能使用此功能。");
+            return;
+        }
+        let htmlContent = document.documentElement.outerHTML;
+        
+        let currentParticipantsStr = JSON.stringify(participants);
+        htmlContent = htmlContent.replace(/let participants = \[.*?\];/, `let participants = ${currentParticipantsStr};`);
+
+        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'index.html';
+        a.click();
+        URL.revokeObjectURL(url);
+
+        alert("💾 網頁已成功打包下載！基於安全考量，主持人權限將重置，請重新整理或重新輸入密碼。");
+        location.reload(); // 自動重整網頁，重置權限狀態
+    }
+
     generateNewGame();
 </script>
 
