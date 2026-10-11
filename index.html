@@ -1,6 +1,6 @@
 <html lang="zh-TW"><head>
     <meta charset="UTF-8">
-    <title>🎄 交換禮物大作戰：動態重新產生版</title>
+    <title>🎄 交換禮物大作戰：單一循環版</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;700;900&display=swap');
 
@@ -218,7 +218,7 @@
 
 <div class="game-cabinet">
     <div class="arcade-title">🎄 聖誕交換禮物大作戰 🎄</div>
-    <div class="arcade-subtitle">主持人專屬控制台：可下載總表或一鍵重新產生全新配對網頁！</div>
+    <div class="arcade-subtitle">單一循環配對：每個人送給下一位，最後一位送給第一位。每次重新產生都會隨機更新！</div>
 
     <div class="host-login-bar" id="hostLoginBar">
         <span style="font-size: 13px; color: #f39c12; font-weight: bold;">🔒 主持人專用區：</span>
@@ -282,19 +282,19 @@
                 <div style="font-size: 11px; color: #8b949e; margin-top: 4px;">安全解鎖 🔒</div>
             </div></div>
 
-    <div class="logger-box" id="systemLog">[解鎖成功] 承軒 成功開啟了禮物箱！<br>📥 主持人已下載固定密碼總表 (TXT)。<br>[主持人解鎖] 歡迎回來！您已獲得完整控制權限。<br>[主持人解鎖] 歡迎回來！您已獲得完整控制權限。<br>[解鎖成功] 承軒 成功開啟了禮物箱！<br>📥 主持人已下載固定密碼總表 (TXT)。<br>[主持人解鎖] 歡迎回來！您已獲得完整控制權限。<br>[解鎖成功] 承軒 成功開啟了禮物箱！<br>📥 主持人已下載固定密碼總表 (TXT)。<br>[主持人解鎖] 歡迎回來！您已獲得完整控制權限。<br>
+    <div class="logger-box" id="systemLog">[解鎖成功] 睿彬爸爸 成功開啟了禮物箱！<br>[解鎖成功] 俊逸 成功開啟了禮物箱！<br>[解鎖成功] 昱翔 成功開啟了禮物箱！<br>[解鎖成功] 子倫 成功開啟了禮物箱！<br>[解鎖成功] 刁哥 成功開啟了禮物箱！<br>[解鎖成功] 宗翰 成功開啟了禮物箱！<br>[解鎖成功] BAO 成功開啟了禮物箱！<br>[解鎖成功] 子豪 成功開啟了禮物箱！<br>[解鎖成功] 朱哲 成功開啟了禮物箱！<br>[解鎖成功] 路人 成功開啟了禮物箱！<br>[解鎖成功] 傑夫 成功開啟了禮物箱！<br>[解鎖成功] 承軒 成功開啟了禮物箱！<br>📥 主持人已下載固定密碼總表 (TXT)。<br>[主持人解鎖] 歡迎回來！您已獲得完整控制權限。<br>
         [系統提示] 機台已上線。配對已安全鎖定，請輸入主持人密碼解鎖管理功能。
     </div>
 </div>
 
 <div id="pinModal" class="modal-overlay" style="display: none;">
     <div class="modal-box">
-        <div class="modal-title" id="modalPlayerName">承軒 的禮物箱</div>
+        <div class="modal-title" id="modalPlayerName">睿彬爸爸 的禮物箱</div>
         <div style="font-size: 13px; color: #8b949e; margin-bottom: 10px;">請輸入您的 4 位數專屬密碼</div>
         <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" onkeydown="if(event.key==='Enter') verifyPin()">
         <button class="btn-submit" onclick="verifyPin()">確認解鎖</button>
         <button class="btn-submit btn-close" onclick="closeModal()">返回</button>
-        <div id="modalResult" class="result-display">🎉 恭喜解鎖！<br>您要送給：<span style="color:#f1c40f;">俊逸</span></div>
+        <div id="modalResult" class="result-display">🎉 恭喜解鎖！<br>您要送給：<span style="color:#f1c40f;">承軒</span></div>
     </div>
 </div>
 
@@ -305,89 +305,89 @@
     {
         "name": "承軒",
         "avatar": "🎅",
-        "pwdHash": "9ed1279b64427e295210c4bb660464639ab50d0d34e3fae67ee5d2b0af33507e",
-        "target": "俊逸"
+        "pwdHash": "93f7fb79b9839d5d7de0b108e68d2727cbaec99aee51ab7554bf44c1098ab7e1",
+        "target": "子豪"
     },
     {
         "name": "子倫",
         "avatar": "🤶",
-        "pwdHash": "4a1694ef8899c4cf119bcea1008ca5ef90324b4bab44f310b237c2e8ecf42082",
-        "target": "傑夫"
+        "pwdHash": "7d30ab9e27bec084be1df5a64c712c245290d16417166eef058475b9a42f350c",
+        "target": "朱哲"
     },
     {
         "name": "傑夫",
         "avatar": "🦌",
-        "pwdHash": "2315bd64e75a346541681575e5b227059bc726907f5a5b893505b648a3062e77",
-        "target": "子倫"
+        "pwdHash": "939b7d9d39d8977b171c6c2c972eb14c68e2f562126c870720dc602064153090",
+        "target": "昱翔"
     },
     {
         "name": "朱哲",
         "avatar": "⛄",
-        "pwdHash": "8279726d9928f47059d1731e2bb540f194aaaef2636381c3018e59c71ce1c226",
-        "target": "宗翰"
+        "pwdHash": "956e3a30aa831cf4c6506b135f5b1d1c5a634f8310f34193d89af1f2273c1c43",
+        "target": "路人"
     },
     {
         "name": "BAO",
         "avatar": "🎁",
-        "pwdHash": "0e6da782fd921bc121dc0eeb0218d17fcfdd566b898c241b32a9835a35fc24e5",
-        "target": "承軒"
+        "pwdHash": "ce63ea0809ce32335dd7692f1e0c6c5f3493f2b4039351662b60741de4d9a9bd",
+        "target": "刁哥"
     },
     {
         "name": "路人",
         "avatar": "🎄",
-        "pwdHash": "005fc4185b4f6096a1c6273010e11d67b436b338d6168bd54ccb9ecbaf2d7a27",
-        "target": "昱翔"
+        "pwdHash": "9669ea1c789f884f9a83d26761ea073fa1404ff7a3982a2e3eeffbef4a95d678",
+        "target": "BAO"
     },
     {
         "name": "刁哥",
         "avatar": "⭐",
-        "pwdHash": "3c3702aa26399016f4d58984ce2c02794d47870c8dbb87ac953b920f70171cc8",
-        "target": "睿彬爸爸"
+        "pwdHash": "2a3b858f52f7682689e5a2d201d861682f52cab93f7b67c75ff1d9648f79ceb3",
+        "target": "宗翰"
     },
     {
         "name": "昱翔",
         "avatar": "🔔",
-        "pwdHash": "34be1021b378c5701b4dd1430970982e0dbe72b3b340018d7a9b65939881ed7b",
-        "target": "刁哥"
+        "pwdHash": "00c08d89fea3949876a591af017b09ccb7efa99c42117fa70780f9733164d608",
+        "target": "承軒"
     },
     {
         "name": "宗翰",
         "avatar": "🍪",
-        "pwdHash": "83e35ecb553ab49c80d163541253ca5161b6d6e6ebbbac2e77a72a6e90da15d6",
-        "target": "朱哲"
+        "pwdHash": "f2047c17e14c8c5bdbb2270606e4ed0279abd8c7f47198d0077a2962ae935b83",
+        "target": "俊逸"
     },
     {
         "name": "子豪",
         "avatar": "🧊",
-        "pwdHash": "4127bccc19dff8f72c5914cda39b6f6817aee3c5653c680837321e5406decabb",
-        "target": "路人"
+        "pwdHash": "40fb2eddec2f3ffd73fd49b0b72d6f0a1821308747ace6ea3049b40c45917870",
+        "target": "子倫"
     },
     {
         "name": "俊逸",
         "avatar": "🧦",
-        "pwdHash": "509a9edbeff0c385a956b77657466cb7a2d89a6b3e9ed43b5d80996ca2aa6aaf",
-        "target": "BAO"
+        "pwdHash": "3e6fadf870460e8de27944dbf668c111feafdecd7ad396aff65380cde34051b4",
+        "target": "睿彬爸爸"
     },
     {
         "name": "睿彬爸爸",
         "avatar": "🧸",
-        "pwdHash": "af956f342c1c6459ed991798fd3342ed848f24f0e17386831b1ef7b4ef91af34",
-        "target": "子豪"
+        "pwdHash": "b51e45a12fbae3d0ee2bf77f1a4f80cbf642e2b4d1c237d2c0f7053a54f6b388",
+        "target": "傑夫"
     }
 ];
     let rawPasswords = {
-    "承軒": "1755",
-    "子倫": "8209",
-    "傑夫": "1444",
-    "朱哲": "6637",
-    "BAO": "3019",
-    "路人": "6056",
-    "刁哥": "8729",
-    "昱翔": "1071",
-    "宗翰": "7979",
-    "子豪": "9550",
-    "俊逸": "7873",
-    "睿彬爸爸": "9005"
+    "承軒": "5299",
+    "子倫": "8542",
+    "傑夫": "6328",
+    "朱哲": "9470",
+    "BAO": "1813",
+    "路人": "9961",
+    "刁哥": "4148",
+    "昱翔": "2566",
+    "宗翰": "4881",
+    "子豪": "6342",
+    "俊逸": "1395",
+    "睿彬爸爸": "1536"
 };
 
     let activeIndex = null;
@@ -520,11 +520,24 @@
             return;
         }
 
-        // 隨機重排，且確保沒有人抽到自己。
-        let targets;
-        do {
-            targets = shuffleArray(participants);
-        } while (participants.some((person, i) => person === targets[i]));
+        // 隨機產生「單一大循環」：A -> B -> C -> ... -> A。
+        // 先將所有參加者洗牌，再讓每個人送給洗牌後的下一位，最後一位送給第一位。
+        const cycleOrder = shuffleArray(participants);
+        const targetByPerson = {};
+        for (let i = 0; i < cycleOrder.length; i++) {
+            targetByPerson[cycleOrder[i]] = cycleOrder[(i + 1) % cycleOrder.length];
+        }
+        // 防呆檢查：從任一人出發，必須走訪所有參加者且最後回到起點。
+        const visited = new Set();
+        let current = cycleOrder[0];
+        while (!visited.has(current)) {
+            visited.add(current);
+            current = targetByPerson[current];
+        }
+        if (current !== cycleOrder[0] || visited.size !== participants.length) {
+            alert("❌ 配對驗證失敗，請重新操作。");
+            return;
+        }
 
         // 每輪密碼都隨機、同一輪不重複，且盡量確保每個人不會沿用上一輪自己的密碼。
         const newRawPasswords = {};
@@ -545,7 +558,7 @@
                 name: person,
                 avatar: avatars[i % avatars.length],
                 pwdHash: await sha256(newRawPasswords[person]),
-                target: targets[i]
+                target: targetByPerson[person]
             });
         }
 
